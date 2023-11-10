@@ -1,8 +1,8 @@
 const express = require('express')
-const Answer = require('../models/answer')
+const answerModel = require('../models/answer')
 
 const getAllAnswers = (req, res, next) => {
-  Answer.find({})
+  answerModel.find({})
   .them((answers) => {
     res.send(answers)
   })
@@ -10,15 +10,15 @@ const getAllAnswers = (req, res, next) => {
 }
 
 // Post
-const createAnswer = (req, res, next) => {
+const createAnswer = (req, res) => {
   const { name, phone } = req.body;
 
-  Answer.create({ name, phone })
+  answerModel.create({ name, phone })
     .then((answer) => {
       res.send(answer);
     })
     .catch((err) => {
-      next(err);
+      console.log(err);
     });
 };
 
