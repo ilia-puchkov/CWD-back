@@ -1,30 +1,16 @@
-import express from 'express';
+import express from "express";
 
-import postModel from '../models/post.model';
-import Post from '../interfaces/post.interface';
+const router = express.Router();
 
-const router = express.Router()
+import { getAllPosts, createPost } from "../controllers/post.controllers";
+import { getAllAnswers, createAnswer } from "../controllers/answer.controller";
 
-function createPost(request: express.Request, response: express.Response) {
-  const postData: Post = request.body;
-  const createdPost = new postModel(postData);
-  createdPost.save().then((savedPost) => {
-    response.send(savedPost);
-  });
-}
+// Work with posts - test
+router.get("/posts", getAllPosts);
+router.post("/", createPost);
 
-function getAllPosts(request: express.Request, response: express.Response) {
-  postModel.find().then((posts) => {
-    response.send(posts);
-  });
-}
+// Work with asnwers
+router.get("/answers", getAllAnswers);
+router.post("/answers", createAnswer);
 
-router.get('/posts', (req: express.Request, res: express.Response) => {
-  getAllPosts(req, res);
-});
-
-router.post('/', (req: express.Request, res: express.Response) => {
-  createPost(req, res);
-});
-
-module.exports = router
+module.exports = router;

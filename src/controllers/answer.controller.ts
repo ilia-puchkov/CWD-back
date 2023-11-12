@@ -1,28 +1,22 @@
-const express = require('express')
-const answerModel = require('../models/answer')
+import express from "express";
 
-const getAllAnswers = (req, res, next) => {
-  answerModel.find({})
-  .them((answers) => {
-    res.send(answers)
-  })
-  .catch(next)
+import Answer from "../interfaces/answer.interface";
+import answerModel from "../models/answer.model";
+
+// Create new answer
+function createAnswer(request: express.Request, response: express.Response) {
+  const answerData: Answer = request.body;
+  const createdPost = new answerModel(answerData);
+  createdPost.save().then((savedPost) => {
+    response.send(savedPost);
+  });
 }
 
-// Post
-const createAnswer = (req, res) => {
-  const { name, phone } = req.body;
-
-  answerModel.create({ name, phone })
-    .then((answer) => {
-      res.send(answer);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-};
-
-module.exports = {
-  getAllAnswers,
-  createAnswer
+// Get all saved answers
+function getAllAnswers(request: express.Request, response: express.Response) {
+  answerModel.find().then((posts) => {
+    response.send(posts);
+  });
 }
+
+export { getAllAnswers, createAnswer };
